@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            keyAlias 'LlaveAvanzado'
+            keyPassword 'monica'
+            storeFile file('C:/Users/JAVA/Desktop/Llave.jks')
+            storePassword 'monica'
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "pe.cibertec.gradleejemplo"
@@ -16,13 +24,13 @@ android {
 
         }
         release {
+
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     flavorDimensions "version"
-
     productFlavors {
 
         demo {

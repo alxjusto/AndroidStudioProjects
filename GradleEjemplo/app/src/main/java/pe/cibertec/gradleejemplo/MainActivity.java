@@ -12,10 +12,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (BuildConfig.FLAVOR.equals("demo")){
-            Toast.makeText(this, "Demo", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Versión demo", Toast.LENGTH_SHORT).show();
+        }
 
-        } else {
-            Toast.makeText(this, "Full", Toast.LENGTH_SHORT).show();
+        if (BuildConfig.FLAVOR.equals("full")){
+            Toast.makeText(this, "Versión full", Toast.LENGTH_SHORT).show();
         }
     }
 }
