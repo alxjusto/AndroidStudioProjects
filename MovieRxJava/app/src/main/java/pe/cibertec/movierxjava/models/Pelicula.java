@@ -10,9 +10,13 @@ public class Pelicula {
     @SerializedName("overview")
     private String descripcion;
 
-    public Pelicula(String titulo, String descripcion) {
+    @SerializedName("poster_path")
+    private String urlImagen;
+
+    public Pelicula(String titulo, String descripcion, String urlImagen) {
         this.titulo = titulo;
         this.descripcion = descripcion;
+        this.urlImagen = urlImagen;
     }
 
     public String getTitulo() {
@@ -29,5 +33,13 @@ public class Pelicula {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getUrlImagen() {
+        return urlImagen;
+    }
+
+    public void setUrlImagen(String urlImagen) {
+        this.urlImagen = urlImagen;
     }
 }

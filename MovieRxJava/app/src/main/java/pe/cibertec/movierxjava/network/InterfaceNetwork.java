@@ -8,6 +8,10 @@ import retrofit2.http.Query;
 
 public interface InterfaceNetwork {
 
+    @GET("discover/movie")
+    Observable<RespuestaPelicula> getPeliculas(@Query("api_key") String llave);
+
     @GET("search/movie")
-    Observable<RespuestaPelicula> getPeliculas(@Query("api_key") String  llave, @Query("query") String titulo);
+    Observable<RespuestaPelicula> getPeliculasPorNombre(@Query("api_key") String llave,
+                                                        @Query("query") String titulo);
 }

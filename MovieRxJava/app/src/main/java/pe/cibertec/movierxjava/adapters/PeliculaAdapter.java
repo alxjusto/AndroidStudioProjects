@@ -22,6 +22,10 @@ public class PeliculaAdapter extends RecyclerView.Adapter<PeliculaAdapter.CeldaP
 
     private ArrayList<Pelicula> peliculas;
 
+    public PeliculaAdapter(ArrayList<Pelicula> peliculas) {
+        this.peliculas = peliculas;
+    }
+
     @NonNull
     @Override
     public CeldaPelicula onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -36,7 +40,7 @@ public class PeliculaAdapter extends RecyclerView.Adapter<PeliculaAdapter.CeldaP
         celda.tvTitulo.setText(peliculas.get(posicion).getTitulo());
         celda.tvDescripcion.setText(peliculas.get(posicion).getDescripcion());
         Glide.with(celda.itemView)
-                .load("https://image.tmdb.org/t/p/w500/lfZNJlAZoheNVHPBhTTlpkBQj4B.jpg")
+                .load("https://image.tmdb.org/t/p/w500/" + peliculas.get(posicion).getUrlImagen())
                 .into(celda.ivPoster);
     }
 
