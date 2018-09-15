@@ -3,13 +3,9 @@ package pe.cibertec.movierxjava.ui;
 import android.support.v7.widget.SearchView;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.subjects.PublishSubject;
 import pe.cibertec.movierxjava.models.RespuestaPelicula;
-import pe.cibertec.movierxjava.network.ClienteNetwork;
-import pe.cibertec.movierxjava.network.InterfaceNetwork;
 
 class SearchPresenter implements SearchPresenterInterface{
 
@@ -23,24 +19,33 @@ class SearchPresenter implements SearchPresenterInterface{
     public void obtenerPeliculas(SearchView searchView) {
 
 
-        getObservable(searchView).subscribe(getObserver());
+       getObservable(searchView);
+       getObserver();
     }
 
-    public Observable<RespuestaPelicula> getObservable(SearchView searchView){
-        return ClienteNetwork.getRetrofit()
-                .create(InterfaceNetwork.class)
-                .getPeliculasPorNombre("3cae426b920b29ed2fb1c0749f258325", searchView.toString())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+    private Observable<String> getObservable(SearchView searchView) {
 
-    public Observer<RespuestaPelicula> getObserver(){
-        return new Observer<RespuestaPelicula>() {
+        final PublishSubject<String> publishSubject = PublishSubject.create();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onSubscribe(Disposable d) {
-
+            public boolean onQueryTextSubmit(String query) {
+                publishSubject.onNext(query);
+                return true;
             }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                publishSubject.onNext(newText);
+
+                return true;
+            }
+        });
+        return publishSubject;
+    }
+
+    private DisposableObserver<RespuestaPelicula> getObserver() {
+        return new DisposableObserver<RespuestaPelicula>() {
             @Override
             public void onNext(RespuestaPelicula respuestaPelicula) {
                 svi.mostrarPeliculas(respuestaPelicula);
@@ -57,6 +62,10 @@ class SearchPresenter implements SearchPresenterInterface{
             }
         };
     }
+
+
+
+
 
 
 
