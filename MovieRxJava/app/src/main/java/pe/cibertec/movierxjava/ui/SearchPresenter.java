@@ -2,12 +2,22 @@ package pe.cibertec.movierxjava.ui;
 
 import android.support.v7.widget.SearchView;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import pe.cibertec.movierxjava.models.RespuestaPelicula;
+import pe.cibertec.movierxjava.network.ClienteNetwork;
+import pe.cibertec.movierxjava.network.InterfaceNetwork;
 
-class SearchPresenter implements SearchPresenterInterface{
+class SearchPresenter implements SearchPresenterInterface {
 
     SearchViewInterface svi;
 
@@ -19,8 +29,30 @@ class SearchPresenter implements SearchPresenterInterface{
     public void obtenerPeliculas(SearchView searchView) {
 
 
-       getObservable(searchView);
-       getObserver();
+        getObservable(searchView)
+                .filter(new Predicate<String>() {
+                    @Override
+                    public boolean test(String s) throws Exception {
+                        if (s.equals("")) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                })
+                .debounce(1, TimeUnit.SECONDS)
+                .switchMap(new Function<String, Observable<RespuestaPelicula>>() {
+                    @Override
+                    public Observable<RespuestaPelicula> apply(String s) throws Exception {
+                        return ClienteNetwork
+                                .getRetrofit()
+                                .create(InterfaceNetwork.class)
+                                .getPeliculasPorNombre("3cae426b920b29ed2fb1c0749f258325", s);
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getObserver());
     }
 
     private Observable<String> getObservable(SearchView searchView) {
@@ -62,11 +94,6 @@ class SearchPresenter implements SearchPresenterInterface{
             }
         };
     }
-
-
-
-
-
 
 
 }
