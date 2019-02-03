@@ -1,8 +1,13 @@
 package pe.edu.cibertec.movieapi;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Movie {
 
+    @SerializedName("Title")
     private String title;
+
+    @SerializedName("Year")
     private String year;
 
 
