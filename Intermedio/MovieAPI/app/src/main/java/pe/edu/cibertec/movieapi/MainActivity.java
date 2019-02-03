@@ -39,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
                 String movie = etMovie.getText().toString();
 
                 searchMovie(apikey, movie);
-
-
             }
         });
     }
