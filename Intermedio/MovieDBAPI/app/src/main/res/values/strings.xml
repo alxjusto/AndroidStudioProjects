@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MovieDBAPI</string>
+    <string name="hint_movie">Película</string>
+    <string name="button_search">Buscar</string>
+</resources>
